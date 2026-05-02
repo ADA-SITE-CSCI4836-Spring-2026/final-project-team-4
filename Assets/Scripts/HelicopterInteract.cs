@@ -1,8 +1,7 @@
 using UnityEngine;
 
-public class CoinScript : MonoBehaviour, IInteractable
+public class HelicopterInteract : MonoBehaviour, IInteractable
 {
-    public ItemType itemType;
     public Outline outlineScript;
 
     void Start()
@@ -12,8 +11,10 @@ public class CoinScript : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        GameManager.Instance.CollectItem(itemType);
-        Destroy(gameObject);
+        if (GameManager.Instance.HasAllItems())
+            GameManager.Instance.WinGame();
+        else
+            GameManager.Instance.ShowHelicopterMessage();
     }
 
     public void OnHover()
