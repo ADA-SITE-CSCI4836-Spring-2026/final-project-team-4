@@ -3,14 +3,28 @@ using UnityEngine.SceneManagement;
 
 public class PauseManager : MonoBehaviour
 {
+    public static bool IsPaused = false;
+
     public GameObject pauseMenuUI;
-    private bool isPaused = false;
+
+    void Start()
+    {
+        IsPaused = false;
+
+        pauseMenuUI.SetActive(false);
+        Time.timeScale = 1f;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
 
     void Update()
     {
+        if (GameManager.IsGameOver) return;
+
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
         {
-            if (isPaused)
+            if (IsPaused)
                 Resume();
             else
                 Pause();
@@ -20,20 +34,31 @@ public class PauseManager : MonoBehaviour
     public void Resume()
     {
         pauseMenuUI.SetActive(false);
-        Time.timeScale = 1f;  // Game runs normally
-        isPaused = false;
+        Time.timeScale = 1f;
+        IsPaused = false;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void Pause()
     {
         pauseMenuUI.SetActive(true);
-        Time.timeScale = 0f;  // Freezes everything
-        isPaused = true;
+        Time.timeScale = 0f;
+        IsPaused = true;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void GoToMainMenu()
     {
-        Time.timeScale = 1f;  // Reset before leaving!
+        Time.timeScale = 1f;
+        IsPaused = false;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         SceneManager.LoadScene("MainMenu");
     }
 }

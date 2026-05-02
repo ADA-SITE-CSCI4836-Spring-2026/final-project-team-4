@@ -1,32 +1,39 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    public static bool IsGameOver = false;
+
     [Header("Timer")]
-    public float timeRemaining = 120f; // 2 minutes, change as needed
+    public float timeRemaining = 120f;
     public TextMeshProUGUI timerText;
     private bool gameOver = false;
 
     [Header("UI")]
     public GameObject gameOverPanel;
 
+    void Start()
+    {
+        IsGameOver = false;
+        gameOver = false;
+
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(false);
+    }
+
     void Update()
     {
         if (gameOver) return;
 
-        // Count down
         timeRemaining -= Time.deltaTime;
-
-        // Update UI
         UpdateTimerDisplay();
 
-        // Death by radiation
         if (timeRemaining <= 0)
         {
             timeRemaining = 0;
+            UpdateTimerDisplay();
             RadiationDeath();
         }
     }
@@ -41,19 +48,29 @@ public class GameManager : MonoBehaviour
     void RadiationDeath()
     {
         gameOver = true;
+        IsGameOver = true;
+
         Time.timeScale = 0f;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         gameOverPanel.SetActive(true);
     }
 
     public void RestartGame()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("GameScene");
+        IsGameOver = false;
+
+        SceneManager.LoadScene("DemoScene");
     }
 
     public void GoToMainMenu()
     {
         Time.timeScale = 1f;
+        IsGameOver = false;
+
         SceneManager.LoadScene("MainMenu");
     }
 }

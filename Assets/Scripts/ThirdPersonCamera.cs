@@ -27,6 +27,8 @@ public class ThirdPersonCamera : MonoBehaviour
 
     void LateUpdate()
     {
+        if (PauseManager.IsPaused) return;
+        if (GameManager.IsGameOver) return;
         if (target == null) return;
 
         yaw += Input.GetAxis("Mouse X") * mouseSensitivity;
