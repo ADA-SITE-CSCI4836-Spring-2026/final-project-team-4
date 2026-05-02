@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 8f;
+    public float sprintMultiplier = 1.8f; // how much faster on Shift
     public float jumpForce = 4f;
     public float rotationSpeed = 10f;
 
@@ -10,18 +11,20 @@ public class PlayerController : MonoBehaviour
     private Vector3 moveInput;
     private bool jumpInput;
     private bool isGrounded;
+    private bool isSprinting;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
 
-        // Smooth physics + no tipping over
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
 
     void Update()
     {
+        if (PauseManager.IsPaused || GameManager.IsGameOver) return;
+
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
 
@@ -36,6 +39,9 @@ public class PlayerController : MonoBehaviour
 
         moveInput = (camForward * v + camRight * h).normalized;
 
+        // SHIFT sprint
+        isSprinting = Input.GetKey(KeyCode.LeftShift);
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             jumpInput = true;
@@ -44,8 +50,11 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        // DIRECT velocity movement (no acceleration, no shaking)
-        Vector3 targetVelocity = moveInput * moveSpeed;
+        if (PauseManager.IsPaused || GameManager.IsGameOver) return;
+
+        float currentSpeed = isSprinting ? moveSpeed * sprintMultiplier : moveSpeed;
+
+        Vector3 targetVelocity = moveInput * currentSpeed;
 
         rb.velocity = new Vector3(
             targetVelocity.x,
@@ -53,7 +62,6 @@ public class PlayerController : MonoBehaviour
             targetVelocity.z
         );
 
-        // Smooth rotation
         if (moveInput.magnitude > 0.1f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(moveInput);
@@ -64,7 +72,6 @@ public class PlayerController : MonoBehaviour
             ));
         }
 
-        // Jump
         if (jumpInput && isGrounded)
         {
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
