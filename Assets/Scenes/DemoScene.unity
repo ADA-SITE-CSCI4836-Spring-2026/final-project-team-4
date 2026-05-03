@@ -2500,7 +2500,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 931330800}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b821acceffc60c14a81989e93b6783d7, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2578,10 +2578,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1b50f4f7790f4e4dbb95832a9a4226a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 36
-  sprintMultiplier: 1.8
-  jumpForce: 100
+  moveForceGround: 120
+  moveForceAir: 30
+  sprintMultiplier: 1.6
+  jumpForce: 50
   rotationSpeed: 10
+  extraGravity: 50
+  maxGroundSpeed: 30
+  maxSprintSpeed: 45
+  maxAirSpeed: 30
 --- !u!54 &931330806
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2590,8 +2595,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 931330800}
   serializedVersion: 4
-  m_Mass: 10
-  m_Drag: 1
+  m_Mass: 1.5
+  m_Drag: 0.8
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -2607,7 +2612,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!1 &1000857953
 GameObject:
@@ -4490,7 +4495,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 7211fd1b876562845844eab9f6a12d25, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.1
+  m_Volume: 0.15
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -4602,7 +4607,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.68652475, b: 0.3075471, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -4712,7 +4717,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 85fd2a9c0a9fc6b40b475d01de100e97, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.8
+  m_Volume: 1
   m_Pitch: 1
   Loop: 1
   Mute: 0
